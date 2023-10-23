@@ -9,7 +9,7 @@ const app: express.Express = express();
 const PORT = process.env.PORT;
 
 // ルーティングの設定
-app.use("/", router);
+app.use("/api", router);
 
 // サーバーの起動
 app.listen(PORT, () => {

@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import router from './routes/index';
+import UserRouter from './routes/users';
+import NoteRouter from './routes/notes';
 
 // 環境変数の読み込み
 dotenv.config();
@@ -8,8 +9,12 @@ dotenv.config();
 const app: express.Express = express();
 const PORT = process.env.PORT;
 
+// jsonを読むための設定
+app.use(express.json());
+
 // ルーティングの設定
-app.use("/api", router);
+app.use("/api", UserRouter);
+app.use("/api", NoteRouter);
 
 // サーバーの起動
 app.listen(PORT, () => {

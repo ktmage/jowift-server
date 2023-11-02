@@ -12,3 +12,11 @@
 ## 次回やること
 - tagの実装から...
 - プロジェクトルートの設定をしたいから、tsconfig.jsonをあたりを弄ってみたい。
+
+## 認証アーキテクチャ
+
+client                      server
+            ---登録情報--->  User作成、UID作成、紐づけ
+Cookie格納   <---UID---      set-cookie uid response.
+
+

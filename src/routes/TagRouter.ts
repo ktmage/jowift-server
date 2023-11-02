@@ -5,5 +5,6 @@ const router = express.Router();
 
 
 router.post('/', TagController.Create)
+router.post('/:id/rename',)
 
 export default router;

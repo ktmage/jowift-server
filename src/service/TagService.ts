@@ -5,7 +5,7 @@ const prisma = new PrismaClient
 
 class TagService {
     
-
+    // タグの作成
     static async Create(name: string, userId: number): Promise<Result<number>>{
         try {
             // タグを作成。
@@ -25,7 +25,28 @@ class TagService {
             return {status: false, error:'server error.' }        
     
         } finally {
-            prisma.$disconnect();
+           await prisma.$disconnect();
+        }
+    }
+
+    // タグの名前を変更する。
+    static async Rename(name: string, tagId: number) : Promise<Result<void>> {
+        try{
+            await prisma.tag.update({
+                where:{
+                    id: tagId,
+                },
+                data:{
+                    name: name
+                }
+            })
+
+            return { status: true } 
+        } catch(error){
+            console.log(error);
+            return {status: false, error: 'server error.'}
+        } finally {
+            await prisma.$disconnect();
         }
     }
 }

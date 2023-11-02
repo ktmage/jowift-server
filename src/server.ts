@@ -16,21 +16,7 @@ const PORT = process.env.PORT;
 // jsonを読むための設定
 app.use(express.json());
 
-// express-sessionの場合
-// 🔍Docs: https://github.com/expressjs/session
-// app.use(session({
-// 	secret: 'secret',
-// 	resave: false,
-// 	saveUninitialized: false,
-// 	store: new session.MemoryStore(),
-// 	cookie: {
-// 		httpOnly: true,
-// 		secure: false,
-// 		maxAge: 1000 * 60 * 30
-// 	}
-// }))
-
-// cookie-sessionの場合
+// cookieSessionの設定
 app.use(
 	cookieSession({
 		name: 'session', // Cookieの名前

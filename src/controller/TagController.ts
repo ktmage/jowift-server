@@ -20,6 +20,8 @@ class TagController {
             return res.status(400).json({error: result.error});
         }
     }
+
+    
 }
 
 export default TagController;

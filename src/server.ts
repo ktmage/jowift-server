@@ -15,6 +15,14 @@ const SESSION_CHECK_PERIOD_MINUTES = Number(getEnvVariable('SESSION_CHECK_PERIOD
 
 const app: express.Express = express();
 
+app.use((req, res, next) => {
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+	res.setHeader('Access-Control-Allow-Credentials', 'true');
+	next();
+});
+
 // jsonを読むための設定
 app.use(express.json());
 
@@ -41,6 +49,11 @@ declare module 'express-session' {
 		userId: number;
 	}
 }
+
+app.use((req, res, next) => {
+	console.log(req.session.id);
+	next();
+});
 
 // ルーティングの設定
 app.use('/', Router);

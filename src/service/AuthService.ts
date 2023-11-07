@@ -5,55 +5,59 @@ import { Result } from '../types';
 const prisma = new PrismaClient();
 
 class AuthService {
-    // サインアップができたらユーザーIDを返す。
-	static async SignUp(username: string, email: string, password: string): Promise<Result<number>> {
-        try {
+	// サインアップができたらユーザーIDを返す。
+	static async SignUp(
+		username: string,
+		email: string,
+		password: string,
+	): Promise<Result<number>> {
+		try {
 			// パスワードのハッシュ化
 			const hashedPassword = await bcrypt.hash(password, 10);
-            const user = await prisma.user.create({
-                data: {
-                    name: username,
-                    email: email,
-                    password: hashedPassword,
-                },
-            });
-            return { status: true, data: user.id };
+			const user = await prisma.user.create({
+				data: {
+					name: username,
+					email: email,
+					hashedPassword: hashedPassword,
+				},
+			});
+			return { status: true, data: user.id };
 		} catch (error) {
-            console.log(error);
+			console.log(error);
 			return { status: false, error: 'server error.' };
 		} finally {
-            await prisma.$disconnect();
-        }
+			await prisma.$disconnect();
+		}
 	}
 
-    // ログインができたらユーザーIDを返す。
-    static async Login(email: string, password: string): Promise<Result<number>> {
-        try {
-            const user = await prisma.user.findUnique({
-                where: {
-                    email: email,
-                },
-            });
-            
-            // ユーザーが存在しない場合
-            if (!user) {
-                return { status: false, error: 'invalid username or password.' };
-            }
+	// ログインができたらユーザーIDを返す。
+	static async Login(email: string, password: string): Promise<Result<number>> {
+		try {
+			const user = await prisma.user.findUnique({
+				where: {
+					email: email,
+				},
+			});
 
-            // パスワードが一致しない場合
-            const isValidPassword = await bcrypt.compare(password, user.password);
-            if (!isValidPassword) {
-                return { status: false, error: 'invalid username or password.' };
-            }
+			// ユーザーが存在しない場合
+			if (!user) {
+				return { status: false, error: 'invalid username or password.' };
+			}
 
-            return { status: true, data: user.id };
-        } catch (error) {
-            console.log(error);
-            return { status: false, error: 'server error.' };
-        } finally {
-            await prisma.$disconnect();
-        }
-    }
+			// パスワードが一致しない場合
+			const isValidPassword = await bcrypt.compare(password, user.hashedPassword);
+			if (!isValidPassword) {
+				return { status: false, error: 'invalid username or password.' };
+			}
+
+			return { status: true, data: user.id };
+		} catch (error) {
+			console.log(error);
+			return { status: false, error: 'server error.' };
+		} finally {
+			await prisma.$disconnect();
+		}
+	}
 }
 
 export default AuthService;

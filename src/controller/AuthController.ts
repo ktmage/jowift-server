@@ -10,7 +10,7 @@ class AuthController {
 			return;
 		}
 
-		const result = await AuthService.SignUp(name, email, password)
+		const result = await AuthService.SignUp(name, email, password);
 		if (result.status) {
 			req.session.userId = result.data;
 			res.status(200).send({ message: 'success.' });

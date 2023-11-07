@@ -1,15 +1,17 @@
 import express from 'express';
+import { isAuthenticated } from '../middleware';
 import AuthRouter from './AuthRouter';
 import NoteRouter from './NoteRouter';
-// import isAuthenticated from '../middleware/isAuthenticated';
+import TagRouter from './TagRouter';
 
 const router = express.Router();
 
 router.use('/auth', AuthRouter);
 
-// 一旦アクセス制限を無効化
-// router.use(isAuthenticated);
+// 認証が必要なルーティング
+router.use(isAuthenticated);
 
 router.use('/note', NoteRouter);
+router.use('/tag', TagRouter);
 
 export default router;

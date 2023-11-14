@@ -3,6 +3,7 @@ import session from 'express-session';
 import Router from './routes';
 import { PrismaClient } from '@prisma/client';
 import { getEnvVariable } from './utility';
+import cors from 'cors';
 
 // prismaでセッションを管理するためのミドルウェア
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
@@ -12,16 +13,19 @@ const PORT = Number(getEnvVariable('PORT'));
 const SESSION_LIMIT_DAYS = Number(getEnvVariable('SESSION_LIMIT_DAYS'));
 const SESSION_SECRET = getEnvVariable('SESSION_SECRET');
 const SESSION_CHECK_PERIOD_MINUTES = Number(getEnvVariable('SESSION_CHECK_PERIOD_MINUTES'));
+const CLIENT_URL = getEnvVariable('CLIENT_URL');
+const ALLOW_METHODS = getEnvVariable('ALLOW_METHODS');
+const ALLOW_HEADERS = getEnvVariable('ALLOW_HEADERS');
 
 const app: express.Express = express();
 
-app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-	res.setHeader('Access-Control-Allow-Credentials', 'true');
-	next();
-});
+// corsの設定
+app.use(cors({
+	origin: CLIENT_URL,
+	methods: ALLOW_METHODS,
+	allowedHeaders: ALLOW_HEADERS,
+	credentials: true,
+}));
 
 // jsonを読むための設定
 app.use(express.json());

@@ -54,6 +54,7 @@ declare module 'express-session' {
 	}
 }
 
+// debug
 app.use((req, res, next) => {
 	console.log(req.session.id);
 	next();

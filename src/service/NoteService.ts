@@ -190,6 +190,7 @@ class NoteService {
 			await prisma.note.delete({
 				where: {
 					id: noteId,
+					
 				},
 			});
 

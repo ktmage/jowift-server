@@ -27,7 +27,7 @@ model Note {
   content  String
   author   User?   @relation(fields: [authorId], references: [id])
   authorId Int?
-  tags     NoteTag[]
+  tags     NoteTag[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -45,8 +45,8 @@ model Tag {
 model NoteTag {
   noteId String
   tagId  String
-  note   Note @relation(fields: [noteId], references: [id])
-  tag    Tag  @relation(fields: [tagId], references: [id])
+  note   Note @relation(fields: [noteId], references: [id], onDelete: Cascade) // onDelete: Cascade でnoteが削除されたらNoteTagも削除されるようにする。
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade) // onDelete: Cascade でtagが削除されたらNoteTagも削除されるようにする。
 
   @@id([noteId, tagId])
 }

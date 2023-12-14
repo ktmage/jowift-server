@@ -24,7 +24,7 @@ model User {
 model Note {
   id       String  @id @default(uuid())
   title    String
-  content  String
+  content  String  @db.Text
   author   User?   @relation(fields: [authorId], references: [id])
   authorId Int?
   tags     NoteTag[] 

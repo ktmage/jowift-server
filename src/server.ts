@@ -39,7 +39,6 @@ app.use(
 			sameSite: 'none',
 			secure: true,
 			httpOnly: true,
-			domain: "jowift-web-client" + CLIENT_URL,
 		},
 		secret: SESSION_SECRET,
 		resave: false,

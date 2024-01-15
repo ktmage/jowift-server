@@ -20,12 +20,14 @@ const ALLOW_HEADERS = getEnvVariable('ALLOW_HEADERS');
 const app: express.Express = express();
 
 // corsの設定
-app.use(cors({
-	origin: "https://" + CLIENT_URL,
-	methods: ALLOW_METHODS,
-	allowedHeaders: ALLOW_HEADERS,
-	credentials: true,
-}));
+app.use(
+	cors({
+		origin: 'https://' + CLIENT_URL,
+		methods: ALLOW_METHODS,
+		allowedHeaders: ALLOW_HEADERS,
+		credentials: true,
+	}),
+);
 
 // jsonを読むための設定
 app.use(express.json());
@@ -38,7 +40,6 @@ app.use(
 			maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
 			sameSite: 'none',
 			secure: true,
-			httpOnly: true,
 		},
 		secret: SESSION_SECRET,
 		resave: false,
@@ -71,4 +72,3 @@ app.use('/', Router);
 app.listen(PORT, () => {
 	console.log(`Start >> http://localhost:${PORT}`);
 });
-

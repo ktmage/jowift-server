@@ -31,6 +31,7 @@ app.use(cors({
 app.use(express.json());
 
 // express-sessionの設定
+console.log(CLIENT_URL);
 app.use(
 	session({
 		cookie: {

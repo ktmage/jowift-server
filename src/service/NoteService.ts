@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 import { DisplayNote, Result } from '../types';
+import NoteListItem from '../types/NoteListItem.type';
 
 const prisma = new PrismaClient();
 
@@ -95,7 +96,7 @@ class NoteService {
 		}
 	}
 
-	static async getAll(userId: number): Promise<Result<DisplayNote[]>> {
+	static async getAll(userId: number): Promise<Result<NoteListItem[]>> {
 		try {
 			const note = await prisma.note.findMany({
 				where: {
@@ -104,7 +105,7 @@ class NoteService {
 				select: {
 					id: true,
 					title: true,
-					content: true,
+					content: false,
 					createdAt: true,
 					updatedAt: true,
 					author: {
@@ -118,8 +119,7 @@ class NoteService {
 								select: {
 									id: true,
 									name: true,
-									createdAt: true,
-									updatedAt: true,
+									
 								},
 							},
 						},
@@ -164,8 +164,9 @@ class NoteService {
 				});
 
 				await Promise.all(
-					tagId.map(async (tagId: string) => {
-						await transaction.noteTag.create({
+					tagId.map((tagId: string, index) => {
+						console.log(index);
+						return transaction.noteTag.create({
 							data: {
 								note: { connect: { id: noteId } },
 								tag: { connect: { id: tagId } },
@@ -190,7 +191,6 @@ class NoteService {
 			await prisma.note.delete({
 				where: {
 					id: noteId,
-					
 				},
 			});
 

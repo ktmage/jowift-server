@@ -15,7 +15,7 @@ class TagController {
 
 		const result = await TagService.create(name, userId);
 		if (result.status) {
-			return res.status(200).json({ message: 'success.' });
+			return res.status(200).json({ message: 'success.', id: result.data });
 		} else {
 			return res.status(400).json({ error: result.error });
 		}

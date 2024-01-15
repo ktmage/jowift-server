@@ -32,6 +32,7 @@ class AuthService {
 
 	// ログインができたらユーザーIDを返す。
 	static async Login(email: string, password: string): Promise<Result<number>> {
+		console.log(email, password);
 		try {
 			const user = await prisma.user.findUnique({
 				where: {
@@ -51,6 +52,47 @@ class AuthService {
 			}
 
 			return { status: true, data: user.id };
+		} catch (error) {
+			console.log(error);
+			return { status: false, error: 'server error.' };
+		} finally {
+			await prisma.$disconnect();
+		}
+	}
+
+	static async getUser(userId: number): Promise<Result<{username:string, email:string}>> {
+		try {
+			const user = await prisma.user.findUnique({
+				where: {
+					id: userId,
+				},
+				select: {
+					name: true,
+					email: true,
+				},
+			});
+
+			if (!user) {
+				return { status: false, error: 'user not found.' };
+			}
+
+			return { status: true, data: { username: user.name, email:user.email } };
+		} catch (error) {
+			console.log(error);
+			return { status: false, error: 'server error.' };
+		} finally {
+			await prisma.$disconnect();
+		}
+	}
+
+	static async deleteUser(userId: number): Promise<Result<void>> {
+		try {
+			await prisma.user.delete({
+				where: {
+					id: userId,
+				},
+			});
+			return { status: true };
 		} catch (error) {
 			console.log(error);
 			return { status: false, error: 'server error.' };

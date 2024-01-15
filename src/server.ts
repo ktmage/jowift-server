@@ -55,10 +55,10 @@ declare module 'express-session' {
 }
 
 // debug
-app.use((req, res, next) => {
-	console.log(req.session.id);
-	next();
-});
+// app.use((req, res, next) => {
+// 	console.log(req.session.id);
+// 	next();
+// });
 
 // ルーティングの設定
 app.use('/', Router);

@@ -15,7 +15,7 @@ class NoteController {
 
 		const result = await NoteService.post({ title, content }, userId, tagId);
 		if (result.status) {
-			return res.status(200).json({ message: 'success.' });
+			return res.status(200).json({ message: 'success.', id: result.data });
 		} else {
 			return res.status(400).json({ error: result.error });
 		}

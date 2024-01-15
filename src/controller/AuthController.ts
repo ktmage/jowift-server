@@ -52,6 +52,34 @@ class AuthController {
 			}
 		});
 	}
+
+	static async getUser(req: Request, res: Response) {
+		if (!req.session.userId) {
+			res.status(401).send({ message: 'no active session.' });
+			return;
+		}
+
+		const result = await AuthService.getUser(req.session.userId);
+		if (result.status) {
+			res.status(200).send({ message: 'success.', data: result.data });
+		} else {
+			res.status(400).send({ message: result.error });
+		}
+	}
+
+	static async deleteUser(req: Request, res: Response) {
+		if (!req.session.userId) {
+			res.status(401).send({ message: 'no active session.' });
+			return;
+		}
+
+		const result = await AuthService.deleteUser(req.session.userId);
+		if (result.status) {
+			res.status(200).send({ message: 'success.' });
+		} else {
+			res.status(400).send({ message: result.error });
+		}
+	}
 }
 
 export default AuthController;

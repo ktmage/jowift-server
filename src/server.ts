@@ -21,7 +21,7 @@ const app: express.Express = express();
 
 // corsの設定
 app.use(cors({
-	origin: CLIENT_URL,
+	origin: "https://" + CLIENT_URL,
 	methods: ALLOW_METHODS,
 	allowedHeaders: ALLOW_HEADERS,
 	credentials: true,

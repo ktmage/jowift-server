@@ -38,7 +38,8 @@ app.use(
 			maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
 			sameSite: 'none',
 			secure: true,
-			domain: CLIENT_URL,
+			httpOnly: true,
+			domain: "jowift-web-client" + CLIENT_URL,
 		},
 		secret: SESSION_SECRET,
 		resave: false,
@@ -71,3 +72,4 @@ app.use('/', Router);
 app.listen(PORT, () => {
 	console.log(`Start >> http://localhost:${PORT}`);
 });
+

@@ -35,6 +35,7 @@ app.use(
 	session({
 		cookie: {
 			maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
+			sameSite: 'none',
 		},
 		secret: SESSION_SECRET,
 		resave: false,

@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "dev": "npx tsnd src/server.ts",
-    "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\""
+    "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "build": "tsc -p .",
+    "start": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",

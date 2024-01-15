@@ -37,6 +37,7 @@ app.use(
 			maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
 			sameSite: 'none',
 			secure: true,
+			domain: CLIENT_URL,
 		},
 		secret: SESSION_SECRET,
 		resave: false,

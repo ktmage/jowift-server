@@ -13,45 +13,41 @@ const PORT = Number(getEnvVariable('PORT'));
 const SESSION_LIMIT_DAYS = Number(getEnvVariable('SESSION_LIMIT_DAYS'));
 const SESSION_SECRET = getEnvVariable('SESSION_SECRET');
 const SESSION_CHECK_PERIOD_MINUTES = Number(getEnvVariable('SESSION_CHECK_PERIOD_MINUTES'));
-const CLIENT_URL = getEnvVariable('CLIENT_URL');
+const ALLOW_ORIGIN = getEnvVariable('ALLOW_ORIGIN');
 const ALLOW_METHODS = getEnvVariable('ALLOW_METHODS');
 const ALLOW_HEADERS = getEnvVariable('ALLOW_HEADERS');
+const SAME_SITE = <boolean | 'lax' | 'strict' | 'none'>getEnvVariable('SAME_SITE');
+const SECURE = Boolean(getEnvVariable('SECURE'));
+const HTTP_ONLY = Boolean(getEnvVariable('HTTP_ONLY'));
+const DOMAIN = getEnvVariable('DOMAIN');
 
-const app: express.Express = express();
 
-// corsの設定
-app.use(
-	cors({
-		origin: 'https://' + CLIENT_URL,
-		methods: ALLOW_METHODS,
-		allowedHeaders: ALLOW_HEADERS,
-		credentials: true,
+const corsOptions: cors.CorsOptions = {
+	origin: ALLOW_ORIGIN,
+	methods: ALLOW_METHODS,
+	allowedHeaders: ALLOW_HEADERS,
+	credentials: true,
+}
+
+const cookieOptions: express.CookieOptions = {
+	maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
+	// sameSite: SAME_SITE,
+	// secure: SECURE,
+	httpOnly: HTTP_ONLY,
+	// domain: DOMAIN,
+}
+
+const sessionOptions: session.SessionOptions = {
+	cookie: cookieOptions,
+	secret: SESSION_SECRET,
+	resave: false,
+	saveUninitialized: false,
+	store: new PrismaSessionStore(new PrismaClient(), {
+		checkPeriod: SESSION_CHECK_PERIOD_MINUTES * 60 * 1000,
+		dbRecordIdIsSessionId: true,
+		dbRecordIdFunction: undefined,
 	}),
-);
-
-// jsonを読むための設定
-app.use(express.json());
-
-// express-sessionの設定
-console.log(CLIENT_URL);
-app.use(
-	session({
-		cookie: {
-			maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
-			sameSite: 'none',
-			secure: true,
-			httpOnly: false
-		},
-		secret: SESSION_SECRET,
-		resave: false,
-		saveUninitialized: false,
-		store: new PrismaSessionStore(new PrismaClient(), {
-			checkPeriod: SESSION_CHECK_PERIOD_MINUTES * 60 * 1000,
-			dbRecordIdIsSessionId: true,
-			dbRecordIdFunction: undefined,
-		}),
-	}),
-);
+}
 
 // express-sessionの型拡張
 declare module 'express-session' {
@@ -60,11 +56,22 @@ declare module 'express-session' {
 	}
 }
 
-// debug
-// app.use((req, res, next) => {
-// 	console.log(req.session.id);
-// 	next();
-// });
+console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+console.log(corsOptions);
+console.log(cookieOptions);
+console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+
+const app: express.Express = express();
+
+
+// jsonを読むための設定
+app.use(express.json());
+
+// corsの設定
+app.use(cors(corsOptions));
+
+// sessionの設定
+app.use(session(sessionOptions));
 
 // ルーティングの設定
 app.use('/', Router);

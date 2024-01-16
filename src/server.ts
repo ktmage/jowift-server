@@ -31,8 +31,8 @@ const corsOptions: cors.CorsOptions = {
 
 const cookieOptions: express.CookieOptions = {
 	maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
-	sameSite: SAME_SITE,
-	secure: SECURE,
+	// sameSite: SAME_SITE,
+	// secure: SECURE,
 	httpOnly: HTTP_ONLY,
 	domain: DOMAIN,
 }

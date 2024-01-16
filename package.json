@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx tsnd src/server.ts",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "build": "npm install && tsc -p .",
+    "build": "tsc -p .",
     "start": "node dist/server.js"
   },
   "author": "",

@@ -3,7 +3,7 @@ import session from 'express-session';
 import Router from './routes';
 import { PrismaClient } from '@prisma/client';
 import { getEnvVariable } from './utility';
-// import cors from 'cors';
+import cors from 'cors';
 
 // prismaでセッションを管理するためのミドルウェア
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
@@ -11,31 +11,32 @@ import path from 'path';
 
 // 環境変数の読み込み
 const PORT = Number(getEnvVariable('PORT'));
+const CORS_ALLOW_ORIGIN = getEnvVariable('CORS_ALLOW_ORIGIN');
+const CORS_ALLOW_METHODS = getEnvVariable('CORS_ALLOW_METHODS');
+const CORS_ALLOW_HEADERS = getEnvVariable('CORS_ALLOW_HEADERS');
 const SESSION_LIMIT_DAYS = Number(getEnvVariable('SESSION_LIMIT_DAYS'));
 const SESSION_SECRET = getEnvVariable('SESSION_SECRET');
 const SESSION_CHECK_PERIOD_MINUTES = Number(getEnvVariable('SESSION_CHECK_PERIOD_MINUTES'));
-// const ALLOW_ORIGIN = getEnvVariable('ALLOW_ORIGIN');
-// const ALLOW_METHODS = getEnvVariable('ALLOW_METHODS');
-// const ALLOW_HEADERS = getEnvVariable('ALLOW_HEADERS');
-// const SAME_SITE = <boolean | 'lax' | 'strict' | 'none'>getEnvVariable('SAME_SITE');
-// const SECURE = Boolean(getEnvVariable('SECURE'));
-const HTTP_ONLY = Boolean(getEnvVariable('HTTP_ONLY'));
-// const DOMAIN = getEnvVariable('DOMAIN');
+const COOKIE_SAME_SITE = <boolean | 'lax' | 'strict' | 'none'>getEnvVariable('COOKIE_SAME_SITE');
+const COOKIE_SECURE = getEnvVariable('COOKIE_SECURE') === "true";
+const COOKIE_HTTP_ONLY = getEnvVariable('COOKIE_HTTP_ONLY') === "true";
+const COOKIE_DOMAIN = getEnvVariable('COOKIE_DOMAIN');
 
+// CORSの設定
+const corsOptions: cors.CorsOptions = {
+	origin: CORS_ALLOW_ORIGIN,
+	methods: CORS_ALLOW_METHODS,
+	allowedHeaders: CORS_ALLOW_HEADERS,
+	credentials: true,
+}
 
-// const corsOptions: cors.CorsOptions = {
-// 	origin: ALLOW_ORIGIN,
-// 	methods: ALLOW_METHODS,
-// 	allowedHeaders: ALLOW_HEADERS,
-// 	credentials: true,
-// }
-
+// Cookieの設定
 const cookieOptions: express.CookieOptions = {
 	maxAge: SESSION_LIMIT_DAYS * 24 * 60 * 60 * 1000,
-	// sameSite: SAME_SITE,
-	// secure: SECURE,
-	httpOnly: HTTP_ONLY,
-	// domain: DOMAIN,
+	sameSite: COOKIE_SAME_SITE,
+	secure: COOKIE_SECURE,
+	httpOnly: COOKIE_HTTP_ONLY,
+	domain: COOKIE_DOMAIN,
 }
 
 const sessionOptions: session.SessionOptions = {
@@ -64,12 +65,10 @@ const app: express.Express = express();
 app.use(express.json());
 
 // corsの設定
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // sessionの設定
 app.use(session(sessionOptions));
-
-console.log(__dirname, '../public');
 
 // 静的ファイルの設定
 app.use(express.static(path.join(path.resolve(__dirname, '../public'))));

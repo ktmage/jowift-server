@@ -1,0 +1,14 @@
+[] 
+
+
+#
+# ========== example ==========
+# [add]index.ts
+# 
+# create a new file
+# ========== prefix ==========
+# add       : add new file
+# delete    : delete file
+# update    : update file
+# fix       : fix bug
+#

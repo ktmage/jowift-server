@@ -39,6 +39,9 @@ const cookieOptions: express.CookieOptions = {
 	domain: COOKIE_DOMAIN,
 }
 
+console.log(corsOptions);
+console.log(cookieOptions);
+
 const sessionOptions: session.SessionOptions = {
 	cookie: cookieOptions,
 	secret: SESSION_SECRET,

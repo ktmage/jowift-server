@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "set NODE_ENV=development&& npx tsnd src/server.ts",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "eslint": "eslint --ignore-path .gitignore ./src/**/*.{js,ts}",    
     "build": "tsc -p .",
     "start": "set NODE_ENV=production&&node dist/server.js"
   },

@@ -119,7 +119,6 @@ class NoteService {
 								select: {
 									id: true,
 									name: true,
-									
 								},
 							},
 						},

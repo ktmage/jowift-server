@@ -12,6 +12,6 @@ type NoteListItem = {
 			name: string;
 		};
 	}[];
-}
+};
 
 export default NoteListItem;

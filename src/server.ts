@@ -18,8 +18,8 @@ const SESSION_LIMIT_DAYS = Number(getEnvVariable('SESSION_LIMIT_DAYS'));
 const SESSION_SECRET = getEnvVariable('SESSION_SECRET');
 const SESSION_CHECK_PERIOD_MINUTES = Number(getEnvVariable('SESSION_CHECK_PERIOD_MINUTES'));
 const COOKIE_SAME_SITE = <boolean | 'lax' | 'strict' | 'none'>getEnvVariable('COOKIE_SAME_SITE');
-const COOKIE_SECURE = getEnvVariable('COOKIE_SECURE') === "true";
-const COOKIE_HTTP_ONLY = getEnvVariable('COOKIE_HTTP_ONLY') === "true";
+const COOKIE_SECURE = getEnvVariable('COOKIE_SECURE') === 'true';
+const COOKIE_HTTP_ONLY = getEnvVariable('COOKIE_HTTP_ONLY') === 'true';
 const COOKIE_DOMAIN = getEnvVariable('COOKIE_DOMAIN');
 
 // CORSの設定
@@ -28,7 +28,7 @@ const corsOptions: cors.CorsOptions = {
 	methods: CORS_ALLOW_METHODS,
 	allowedHeaders: CORS_ALLOW_HEADERS,
 	credentials: true,
-}
+};
 
 // Cookieの設定
 const cookieOptions: express.CookieOptions = {
@@ -37,7 +37,7 @@ const cookieOptions: express.CookieOptions = {
 	secure: COOKIE_SECURE,
 	httpOnly: COOKIE_HTTP_ONLY,
 	domain: COOKIE_DOMAIN,
-}
+};
 
 console.log(corsOptions);
 console.log(cookieOptions);
@@ -52,7 +52,7 @@ const sessionOptions: session.SessionOptions = {
 		dbRecordIdIsSessionId: true,
 		dbRecordIdFunction: undefined,
 	}),
-}
+};
 
 // express-sessionの型拡張
 declare module 'express-session' {

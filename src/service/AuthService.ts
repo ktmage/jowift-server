@@ -60,7 +60,7 @@ class AuthService {
 		}
 	}
 
-	static async getUser(userId: number): Promise<Result<{username:string, email:string}>> {
+	static async getUser(userId: number): Promise<Result<{ username: string; email: string }>> {
 		try {
 			const user = await prisma.user.findUnique({
 				where: {
@@ -76,7 +76,7 @@ class AuthService {
 				return { status: false, error: 'user not found.' };
 			}
 
-			return { status: true, data: { username: user.name, email:user.email } };
+			return { status: true, data: { username: user.name, email: user.email } };
 		} catch (error) {
 			console.log(error);
 			return { status: false, error: 'server error.' };

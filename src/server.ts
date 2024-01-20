@@ -26,9 +26,6 @@ const cookieOptions: express.CookieOptions = {
 	domain: COOKIE.DOMAIN,
 };
 
-console.log(corsOptions);
-console.log(cookieOptions);
-
 const sessionOptions: session.SessionOptions = {
 	cookie: cookieOptions,
 	secret: SESSION.SECRET,
@@ -72,5 +69,5 @@ app.get('*', (req, res) => {
 
 // サーバーの起動
 app.listen(PORT, () => {
-	console.log(`Start >> http://localhost:${PORT}`);
+	console.log('>> server started.');
 });

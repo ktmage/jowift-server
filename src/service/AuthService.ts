@@ -32,7 +32,6 @@ class AuthService {
 
 	// ログインができたらユーザーIDを返す。
 	static async Login(email: string, password: string): Promise<Result<number>> {
-		console.log(email, password);
 		try {
 			const user = await prisma.user.findUnique({
 				where: {

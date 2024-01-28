@@ -14,7 +14,7 @@ jobs:
       - name: Clone client
         uses: actions/checkout@v2
         with:
-          repository: ktmage/5sounds-client
+          repository: ktmage/jowift-web-client
           path: client
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           
@@ -22,13 +22,11 @@ jobs:
         run: |
           cd client
           touch .env
-          echo "env.API_URL"
+          echo ${{ env.API_URL }}
           echo "env.API_URL" >> .env
           npm install
           npm run build
           cd ..
-        env:
-          NODE_ENV: production
 
 
       - name: Copy files

@@ -22,8 +22,8 @@ jobs:
         run: |
           cd client
           touch .env
-          echo ${{ env.API_URL }}
-          echo "env.API_URL" >> .env
+          echo ${{ vars.API_URL }}
+          echo "vars.API_URL" >> .env
           npm install
           npm run build
           cd ..

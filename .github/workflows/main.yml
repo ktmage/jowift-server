@@ -21,8 +21,8 @@ jobs:
       - name: Build client
         run: |
           cd client
-          touch .env
-          echo ${{ vars.API_URL }} >> .env
+          touch .env.production.local
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production.local
           npm install @rollup/rollup-linux-x64-gnu
           npm install
           npm run build

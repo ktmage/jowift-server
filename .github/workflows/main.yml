@@ -1,0 +1,43 @@
+name: update-public-files
+on:
+  repository_dispatch:
+    types: [update-files]
+
+jobs:
+  update-public-files:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        
+      - name: clone client
+        uses: actions/checkout@v2
+        with:
+          repository: ktmage/jowift-web-client
+          path: client
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          
+      - name: build client
+        run: |
+          cd client
+          npm install
+          npm run build
+          cd ..
+
+      - name: copy files
+        run: cp -r client/dist/* public/
+
+      - name: clean client
+        run: rm -rf client
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          commit-message: Update public files
+          title: 'Update public files'
+          body: 'This PR updates the public files with the latest dist files.'
+          branch: 'update-public-files'
+          delete-branch: true
+          branch-suffix: timestamp

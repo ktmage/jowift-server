@@ -19,4 +19,10 @@ export const SESSION = {
 	CHECK_PERIOD_MINUTES: Number(getEnvVariable('SESSION_CHECK_PERIOD_MINUTES')),
 };
 
+export const GOOGLE_OAUTH = {
+	CLIENT_ID: getEnvVariable('GOOGLE_CLIENT_ID'),
+	CLIENT_SECRET: getEnvVariable('GOOGLE_CLIENT_SECRET'),
+	CALLBACK_URL: getEnvVariable('GOOGLE_CALLBACK_URL'),
+};
+
 export const PORT = Number(getEnvVariable('PORT'));

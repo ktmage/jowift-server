@@ -17,7 +17,7 @@ import { DisplayTag, Result } from '../types';
 const prisma = new PrismaClient();
 
 class TagService {
-	static async create(name: string, userId: number): Promise<Result<string>> {
+	static async create(name: string, userId: string): Promise<Result<string>> {
 		try {
 			// タグを作成。
 			const createdTag = await prisma.tag.create({
@@ -38,7 +38,7 @@ class TagService {
 		}
 	}
 
-	static async getAll(userId: number): Promise<Result<DisplayTag[]>> {
+	static async getAll(userId: string): Promise<Result<DisplayTag[]>> {
 		try {
 			const tags = await prisma.tag.findMany({
 				where: {

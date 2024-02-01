@@ -10,7 +10,7 @@ class AuthService {
 		username: string,
 		email: string,
 		password: string,
-	): Promise<Result<number>> {
+	): Promise<Result<string>> {
 		try {
 			// パスワードのハッシュ化
 			const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,7 +31,7 @@ class AuthService {
 	}
 
 	// ログインができたらユーザーIDを返す。
-	static async Login(email: string, password: string): Promise<Result<number>> {
+	static async Login(email: string, password: string): Promise<Result<string>> {
 		try {
 			const user = await prisma.user.findUnique({
 				where: {
@@ -41,6 +41,11 @@ class AuthService {
 
 			// ユーザーが存在しない場合
 			if (!user) {
+				return { status: false, error: 'invalid username or password.' };
+			}
+
+			// パスワードが設定されていない場合
+			if (!user.hashedPassword) {
 				return { status: false, error: 'invalid username or password.' };
 			}
 
@@ -59,7 +64,9 @@ class AuthService {
 		}
 	}
 
-	static async getUser(userId: number): Promise<Result<{ username: string; email: string }>> {
+	static async getUser(
+		userId: string,
+	): Promise<Result<{ username: string; email: string; authMethod: string }>> {
 		try {
 			const user = await prisma.user.findUnique({
 				where: {
@@ -68,6 +75,7 @@ class AuthService {
 				select: {
 					name: true,
 					email: true,
+					authMethod: true,
 				},
 			});
 
@@ -75,7 +83,10 @@ class AuthService {
 				return { status: false, error: 'user not found.' };
 			}
 
-			return { status: true, data: { username: user.name, email: user.email } };
+			return {
+				status: true,
+				data: { username: user.name, email: user.email, authMethod: user.authMethod },
+			};
 		} catch (error) {
 			console.log(error);
 			return { status: false, error: 'server error.' };
@@ -84,7 +95,7 @@ class AuthService {
 		}
 	}
 
-	static async deleteUser(userId: number): Promise<Result<void>> {
+	static async deleteUser(userId: string): Promise<Result<void>> {
 		try {
 			await prisma.user.delete({
 				where: {

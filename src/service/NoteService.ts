@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 class NoteService {
 	static async post(
 		note: Prisma.NoteCreateInput,
-		userId: number,
+		userId: string,
 		tagId: string[],
 	): Promise<Result<string>> {
 		// トランザクション処理
@@ -52,7 +52,7 @@ class NoteService {
 			});
 	}
 
-	static async getById(noteId: string, userId: number): Promise<Result<DisplayNote>> {
+	static async getById(noteId: string, userId: string): Promise<Result<DisplayNote>> {
 		try {
 			const note = await prisma.note.findUnique({
 				where: {
@@ -96,7 +96,7 @@ class NoteService {
 		}
 	}
 
-	static async getAll(userId: number): Promise<Result<NoteListItem[]>> {
+	static async getAll(userId: string): Promise<Result<NoteListItem[]>> {
 		try {
 			const note = await prisma.note.findMany({
 				where: {

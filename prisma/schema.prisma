@@ -12,14 +12,22 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement()) // idは内部でしか使わないのでautoincrementにしておく。
+  id        String  @unique @default(uuid()) // idは内部でしか使わないのでautoincrementにしておく。
   name      String  @unique // nameはparamで使うのでuniqueにしておく。
   email     String  @unique // 同じemailで登録できないようにする。
-  hashedPassword String
+  hashedPassword String?
+  photoUrl  String?
+  authMethod AuthMethod @default(LOCAL)
   notes     Note[]
   tags      Tag[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// 認証方法
+enum AuthMethod {
+  LOCAL
+  GOOGLE
 }
 
 model Note {
@@ -27,7 +35,7 @@ model Note {
   title    String
   content  String  @db.Text
   author   User?   @relation(fields: [authorId], references: [id])
-  authorId Int?
+  authorId String?
   tags     NoteTag[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,7 +45,7 @@ model Tag {
   id       String  @id @default(uuid())
   name     String
   author   User?   @relation(fields: [authorId], references: [id])
-  authorId Int?
+  authorId String?
   notes    NoteTag[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

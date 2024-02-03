@@ -1,61 +1,23 @@
-import express from 'express';
-import session from 'express-session';
-import Router from './routes';
-import { PrismaClient } from '@prisma/client';
-import cors from 'cors';
-import { PORT, CORS, COOKIE, SESSION } from './config';
-
-// prismaでセッションを管理するためのミドルウェア
-import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import path from 'path';
-
-// CORSの設定
-const corsOptions: cors.CorsOptions = {
-	origin: CORS.ALLOW_ORIGIN,
-	methods: CORS.ALLOW_METHODS,
-	allowedHeaders: CORS.ALLOW_HEADERS,
-	credentials: true,
-};
-
-// Cookieの設定
-const cookieOptions: express.CookieOptions = {
-	maxAge: SESSION.LIMIT_DAYS * 24 * 60 * 60 * 1000,
-	sameSite: COOKIE.SAME_SITE,
-	secure: COOKIE.SECURE,
-	httpOnly: COOKIE.HTTP_ONLY,
-	domain: COOKIE.DOMAIN,
-};
-
-const sessionOptions: session.SessionOptions = {
-	cookie: cookieOptions,
-	secret: SESSION.SECRET,
-	resave: false,
-	saveUninitialized: false,
-	store: new PrismaSessionStore(new PrismaClient(), {
-		checkPeriod: SESSION.CHECK_PERIOD_MINUTES * 60 * 1000,
-		dbRecordIdIsSessionId: true,
-		dbRecordIdFunction: undefined,
-	}),
-};
-
-// express-sessionの型拡張
-declare module 'express-session' {
-	interface SessionData {
-		userId: number;
-	}
-}
+import express from 'express';
+import Router from './routes';
+import { PORT } from './config';
+import { cors, session, auth } from './middleware';
 
 // expressの設定
-const app: express.Express = express();
+const app = express();
 
 // jsonを読むための設定
 app.use(express.json());
 
-// corsの設定
-app.use(cors(corsOptions));
+// 認証の設定
+app.use(auth);
 
-// sessionの設定
-app.use(session(sessionOptions));
+// CORSの設定
+app.use(cors);
+
+// セッションの設定
+app.use(session);
 
 // 静的ファイルの設定
 app.use(express.static(path.join(path.resolve(__dirname, '../public'))));

@@ -3,7 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 // 認証されているかどうかを判定するミドルウェア
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
 	// 認証されている場合は次の処理へ
-	if (req.session.userId) {
+	// if (req.session.userId) {
+	if (req.user || req.session.userId) {
 		next();
 	}
 

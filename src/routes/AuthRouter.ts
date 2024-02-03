@@ -1,6 +1,7 @@
 import express from 'express';
 import authController from '../controller/AuthController';
 import passport from 'passport';
+import { CORS } from '../config';
 
 const router = express.Router();
 
@@ -16,8 +17,8 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get(
 	'/google/callback',
 	passport.authenticate('google', {
-		successRedirect: 'http://localhost:3000/',
-		failureRedirect: 'http://localhost:3000/',
+		successRedirect: CORS.ALLOW_ORIGIN,
+		failureRedirect: CORS.ALLOW_ORIGIN,
 		session: true,
 	}),
 );

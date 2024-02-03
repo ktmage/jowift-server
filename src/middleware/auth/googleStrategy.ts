@@ -17,7 +17,6 @@ const googleStrategy = new GoogleStrategy(
 		profile: Profile,
 		done: (error: null, id: string) => void,
 	) => {
-		console.log('>> GoogleStrategy');
 		process.nextTick(async () => {
 			await prisma.user.upsert({
 				where: { email: profile.emails ? profile.emails[0].value : '' },

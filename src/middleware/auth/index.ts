@@ -11,12 +11,10 @@ const router = express.Router();
 passport.use(googleStrategy);
 
 passport.serializeUser((userId, done) => {
-	console.log('>> serializeUser');
 	done(null, userId);
 });
 
 passport.deserializeUser(async (userId, done) => {
-	console.log('>> deserializeUser');
 	const user = await prisma.user.findUnique({ where: { id: userId as string } });
 	if (user) {
 		done(null, {

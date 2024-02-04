@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "set NODE_ENV=development&& npx tsnd src/server.ts",
+    "dev": "set NODE_ENV=development&& npx tsnd --files src/server.ts",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "eslint": "eslint --ignore-path .gitignore ./src/**/*.{js,ts}",
     "build": "npm install && tsc -p .",

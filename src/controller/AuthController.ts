@@ -54,8 +54,7 @@ class AuthController {
 	}
 
 	static async getUser(req: Request, res: Response) {
-		// const userId = req.session.userId;
-		const userId = req.session.userId || (req.session.passport && req.session.passport.user);
+		const userId = req.session.userId ?? req.user?.id;
 
 		if (!userId) {
 			res.status(401).send({ message: 'no active session.' });
@@ -71,8 +70,7 @@ class AuthController {
 	}
 
 	static async deleteUser(req: Request, res: Response) {
-		// const userId = req.session.userId;
-		const userId = req.session.userId || (req.session.passport && req.session.passport.user);
+		const userId = req.session.userId ?? req.user?.id;
 
 		if (!userId) {
 			res.status(401).send({ message: 'no active session.' });

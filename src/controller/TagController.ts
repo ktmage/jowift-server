@@ -8,8 +8,8 @@ class TagController {
 			return res.status(400).json({ error: 'invalid request.' });
 		}
 
-		// const userId = req.session.userId;
-		const userId = req.session.userId || (req.session.passport && req.session.passport.user);
+		const userId = req.session.userId ?? req.user?.id;
+
 		if (!userId) {
 			return res.status(400).json({ error: 'invalid session.' });
 		}
@@ -23,8 +23,8 @@ class TagController {
 	}
 
 	static async getAll(req: Request, res: Response) {
-		// const userId = req.session.userId;
-		const userId = req.session.userId || (req.session.passport && req.session.passport.user);
+		const userId = req.session.userId ?? req.user?.id;
+
 		if (!userId) {
 			return res.status(400).json({ error: 'invalid session.' });
 		}

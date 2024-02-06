@@ -30,7 +30,9 @@ jobs:
 
 
       - name: Copy files
-        run: cp -r client/dist/* public/
+        run: |
+          rm -rf public/*
+          cp -r client/dist/* public/
 
       - name: Clean client
         run: rm -rf client

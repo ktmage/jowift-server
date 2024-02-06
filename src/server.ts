@@ -19,6 +19,10 @@ app.use(cors);
 // セッションの設定
 app.use(session);
 
+app.get('/hello', (req, res) => {
+	res.send('Hello');
+});
+
 // 静的ファイルの設定
 app.use(express.static(path.join(path.resolve(__dirname, '../public'))));
 

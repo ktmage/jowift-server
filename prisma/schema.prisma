@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -63,7 +63,8 @@ model NoteTag {
 model Session {
   id        String   @id
   sid       String   @unique
-  data      String   @db.MediumText
+//   data      String   @db.MediumText
+  data      String   @db.Text
   expiresAt   DateTime
 }
 

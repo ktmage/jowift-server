@@ -96,6 +96,10 @@ class AuthService {
 	}
 
 	static async deleteUser(userId: string): Promise<Result<void>> {
+		if (userId === '4aad88b2-61ee-4727-a141-00a36c3c2d65') {
+			return { status: false, error: 'You cannot delete this user.' };
+		}
+
 		try {
 			await prisma.user.delete({
 				where: {

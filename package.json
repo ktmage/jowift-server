@@ -8,7 +8,9 @@
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "eslint": "eslint --ignore-path .gitignore ./src/**/*.{js,ts}",
     "build": "npm install && tsc -p .",
-    "start": "set NODE_ENV=production&&node dist/server.js"
+    "start": "set NODE_ENV=production&&node dist/server.js",
+    "migrate:postgres": "dotenv -e .env.development.local -- npx prisma migrate dev --name postgres-init",
+    "studio:postgres": "dotenv -e .env.development.local -- npx prisma studio"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "@quixo3/prisma-session-store": "^3.1.13",
     "@types/express-session": "^1.17.9",
     "bcrypt": "^5.1.1",
+    "dotenv-cli": "^7.4.2",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "passport": "^0.7.0",

@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -67,43 +70,3 @@ model Session {
   data      String   @db.Text
   expiresAt   DateTime
 }
-
-// client側のURL
-
-// サインアップ
-// https://jowift.com/signup
-
-// ログイン
-// https://jowift.com/login
-
-// ダッシュボード ノートの一覧
-// https://jowift.com/dashboard
-
-// 特定ノートの閲覧
-// https://jowift.com/notes/902a9cfc-b9d2-4668-a4b4-ee00f119ed19
-
-// タグの一覧
-// https://jowift.com/tags/
-
-// 特定タグの閲覧
-// https://jowift.com/tags/453b4cfc-6632-4fac-2355-ff324aab9ded
-
-// ユーザー情報
-// https://jowift.com/user
-
-// 設定
-// https://jowift.com/setting
-
-
-// server側のURL
-// https://jowift-server.com/api/v1/auth/signup
-// https://jowift-server.com/api/v1/auth/login
-// https://jowift-server.com/api/v1/auth/logout
-
-// https://jowift-server.com/api/v1/notes
-// https://jowift-server.com/api/v1/notes/:id
-
-// https://jowift-server.com/api/v1/tags
-// https://jowift-server.com/api/v1/tags/:id
-
-

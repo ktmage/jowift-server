@@ -5,27 +5,27 @@ import Router from './routes';
 import { PORT } from './config';
 import { cors, session, auth } from './middleware';
 
-// expressの設定
 const app = express();
 
-// jsonを読むための設定
+// JSON リクエストボディを解析するためのミドルウェア
 app.use(express.json());
 
-// 認証の設定
+// 認証ミドルウェア
 app.use(auth);
 
-// CORSの設定
+// CORS ミドルウェア
 app.use(cors);
 
-// セッションの設定
+// セッションミドルウェア
 app.use(session);
 
-// 静的ファイルの設定
-app.use(express.static(path.join(path.resolve(__dirname, '../public'))));
-
-// ルーティングの設定
+// /api 以下のエンドポイントをルーティング
 app.use('/api', Router);
 
+// 静的ファイルの提供
+app.use(express.static(path.join(path.resolve(__dirname, '../public'))));
+
+// その他のリクエストは index.html にリダイレクト
 app.get('*', (req, res) => {
 	res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });

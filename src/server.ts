@@ -3,7 +3,9 @@ import path from 'path';
 import express from 'express';
 import Router from './routes';
 import { PORT } from './config';
-import { cors, session, auth } from './middleware';
+import { cors, session, auth, handleError } from './middleware';
+
+// import { handleError } from './utility';
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(session);
 
 // /api 以下のエンドポイントをルーティング
 app.use('/api', Router);
+
+app.use(handleError);
 
 // 静的ファイルの提供
 app.use(express.static(path.join(path.resolve(__dirname, '../public'))));

@@ -1,4 +1,3 @@
-// error-utils.ts
 import { Prisma } from '@prisma/client';
 import { RequestError, ServiceError } from '../utility';
 import { Request, Response, NextFunction } from 'express';

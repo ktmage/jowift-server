@@ -4,7 +4,6 @@ import NoteListItem from '../types/NoteListItem.type';
 
 const prisma = new PrismaClient();
 
-// ノートの全般の処理を行うクラス
 export class NoteModel {
 	// TODO: noteIdが返ってくるのは不自然か。
 	static async create(
@@ -12,7 +11,6 @@ export class NoteModel {
 		userId: string,
 		tagId: string[],
 	): Promise<string> {
-		// トランザクション処理
 		return await prisma
 			.$transaction(async (transaction): Promise<string> => {
 				// ノートを作成
@@ -23,7 +21,6 @@ export class NoteModel {
 					},
 				});
 
-				// 作成したノートのIDを取得
 				const noteId = createdNote.id;
 
 				// ノートとタグを紐づける
@@ -122,7 +119,6 @@ export class NoteModel {
 		}
 	}
 
-	// TODO: 🔍トランザクション処理が回りくどい気がする。本当にこの書き方で良いのか要検討。
 	static async update(
 		noteId: string,
 		updateData: { title: string; content: string },

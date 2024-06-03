@@ -3,7 +3,6 @@ import AuthService from '../service/AuthService';
 import RequestError from '../utility/RequestError';
 import { UserModel } from '../models/UserModel';
 
-// 認証用コントローラー
 class AuthController {
 	static async signUp(req: Request, res: Response, next: NextFunction) {
 		try {

@@ -4,8 +4,6 @@ import { UserModel } from '../models/UserModel';
 import { RequestError } from '../utility';
 
 class AuthService {
-	// TODO: 命名規則が！！！！！！！！！！！！！！！！！！
-
 	static async signUp(username: string, email: string, password: string): Promise<User> {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const user = UserModel.create(username, email, hashedPassword);

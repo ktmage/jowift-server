@@ -5,8 +5,6 @@ import Router from './routes';
 import { PORT } from './config';
 import { cors, session, auth, handleError } from './middleware';
 
-// import { handleError } from './utility';
-
 const app = express();
 
 // JSON リクエストボディを解析するためのミドルウェア
@@ -24,6 +22,7 @@ app.use(session);
 // /api 以下のエンドポイントをルーティング
 app.use('/api', Router);
 
+// エラーハンドリングミドルウェア
 app.use(handleError);
 
 // 静的ファイルの提供

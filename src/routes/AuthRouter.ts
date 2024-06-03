@@ -5,10 +5,11 @@ import { CORS } from '../config';
 
 const router = express.Router();
 
-router.get('/', authController.Session);
-router.post('/login', authController.Login);
-router.post('/signup', authController.SignUp);
-router.get('/logout', authController.Logout);
+router.get('/', authController.session);
+router.post('/login', authController.login);
+router.post('/signup', authController.signUp);
+router.get('/logout', authController.logout);
+
 router.get('/user', authController.getUser);
 router.delete('/user', authController.deleteUser);
 

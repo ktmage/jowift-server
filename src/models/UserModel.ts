@@ -2,7 +2,7 @@ import { PrismaClient, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export class UserModel {
+class UserModel {
 	// サインアップができたらユーザーIDを返す。
 	static async create(username: string, email: string, password: string): Promise<User> {
 		try {
@@ -70,3 +70,5 @@ export class UserModel {
 		}
 	}
 }
+
+export default UserModel;

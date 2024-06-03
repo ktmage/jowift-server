@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import AuthService from '../service/AuthService';
 import RequestError from '../utility/RequestError';
-import { UserModel } from '../models/UserModel';
+import { UserModel } from '../models';
 
 class AuthController {
 	static async signUp(req: Request, res: Response, next: NextFunction) {

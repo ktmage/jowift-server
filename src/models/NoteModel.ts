@@ -4,7 +4,7 @@ import NoteListItem from '../types/NoteListItem.type';
 
 const prisma = new PrismaClient();
 
-export class NoteModel {
+class NoteModel {
 	// TODO: noteIdが返ってくるのは不自然か。
 	static async create(
 		note: Prisma.NoteCreateInput,
@@ -173,3 +173,5 @@ export class NoteModel {
 		}
 	}
 }
+
+export default NoteModel;

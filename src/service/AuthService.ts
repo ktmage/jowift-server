@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { UserModel } from '../models/UserModel';
+import { UserModel } from '../models';
 import { RequestError } from '../utility';
 
 class AuthService {

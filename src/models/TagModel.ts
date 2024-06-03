@@ -3,7 +3,7 @@ import { DisplayTag } from '../types';
 
 const prisma = new PrismaClient();
 
-export class TagModel {
+class TagModel {
 	static async create(name: string, userId: string): Promise<string> {
 		try {
 			const createdTag = await prisma.tag.create({
@@ -92,3 +92,5 @@ export class TagModel {
 		}
 	}
 }
+
+export default TagModel;

@@ -6,6 +6,7 @@ import TagRouter from './TagRouter';
 
 const router = express.Router();
 
+// 認証用のルーティング
 router.use('/auth', AuthRouter);
 
 // 認証が必要なルーティング

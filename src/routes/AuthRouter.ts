@@ -1,16 +1,17 @@
 import express from 'express';
-import authController from '../controller/AuthController';
+import { AuthController } from '../controller';
 import passport from 'passport';
 import { CORS } from '../config';
 
 const router = express.Router();
 
-router.get('/', authController.Session);
-router.post('/login', authController.Login);
-router.post('/signup', authController.SignUp);
-router.get('/logout', authController.Logout);
-router.get('/user', authController.getUser);
-router.delete('/user', authController.deleteUser);
+router.get('/', AuthController.session);
+router.post('/login', AuthController.login);
+router.post('/signup', AuthController.signUp);
+router.get('/logout', AuthController.logout);
+
+router.get('/user', AuthController.getUser);
+router.delete('/user', AuthController.deleteUser);
 
 // Google OAuth
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

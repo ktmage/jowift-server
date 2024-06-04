@@ -1,82 +1,82 @@
-import { Request, Response } from 'express';
-import TagService from '../service/TagService';
+import { NextFunction, Request, Response } from 'express';
+import { TagModel } from '../models';
 
 class TagController {
-	static async create(req: Request, res: Response) {
-		const { name } = req.body;
-		if (!name) {
-			return res.status(400).json({ error: 'invalid request.' });
-		}
+	static async create(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { name } = req.body;
+			if (!name) {
+				throw new Error('invalid request.');
+			}
 
-		const userId = req.session.userId ?? req.user?.id;
+			const userId = req.session.userId ?? req.user?.id;
 
-		if (!userId) {
-			return res.status(400).json({ error: 'invalid session.' });
-		}
+			if (!userId) {
+				throw new Error('no active session.');
+			}
 
-		const result = await TagService.create(name, userId);
-		if (result.status) {
-			return res.status(200).json({ message: 'success.', id: result.data });
-		} else {
-			return res.status(400).json({ error: result.error });
-		}
-	}
-
-	static async getAll(req: Request, res: Response) {
-		const userId = req.session.userId ?? req.user?.id;
-
-		if (!userId) {
-			return res.status(400).json({ error: 'invalid session.' });
-		}
-
-		const result = await TagService.getAll(userId);
-		if (result.status) {
-			return res.status(200).json({ tags: result.data });
-		} else {
-			return res.status(400).json({ error: result.error });
+			const id = await TagModel.create(name, userId);
+			res.status(200).json({ id });
+		} catch (e) {
+			next(e);
 		}
 	}
 
-	static async getById(req: Request, res: Response) {
-		const { tagId } = req.params;
-		if (!tagId) {
-			return res.status(400).json({ error: 'invalid request.' });
-		}
+	static async getAll(req: Request, res: Response, next: NextFunction) {
+		try {
+			const userId = req.session.userId ?? req.user?.id;
 
-		const result = await TagService.getById(tagId);
-		if (result.status) {
-			return res.status(200).json({ tag: result.data });
-		} else {
-			return res.status(400).json({ error: result.error });
-		}
-	}
+			if (!userId) {
+				throw new Error('no active session.');
+			}
 
-	static async rename(req: Request, res: Response) {
-		const { name } = req.body;
-		const { tagId } = req.params;
-		if (!name || !tagId) {
-			return res.status(400).json({ error: 'invalid request.' });
-		}
-
-		const result = await TagService.rename(name, tagId);
-		if (result.status) {
-			return res.status(200).json({ message: 'success.' });
-		} else {
-			return res.status(400).json({ error: result.error });
+			const tags = await TagModel.getAll(userId);
+			res.status(200).json({ tags });
+		} catch (e) {
+			next(e);
 		}
 	}
 
-	static async delete(req: Request, res: Response) {
-		const { tagId } = req.params;
-		if (!tagId) {
-			return res.status(400).json({ error: 'invalid request.' });
-		}
+	static async getById(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { tagId } = req.params;
+			if (!tagId) {
+				throw new Error('invalid request.');
+			}
 
-		const result = await TagService.delete(tagId);
-		if (result.status) {
-			return res.status(200).json({ message: 'success.' });
-		} else {
-			return res.status(400).json({ error: result.error });
+			const tag = await TagModel.getById(tagId);
+			res.status(200).json({ tag });
+		} catch (e) {
+			next(e);
+		}
+	}
+
+	static async update(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { name } = req.body;
+			const { tagId } = req.params;
+			if (!name || !tagId) {
+				throw new Error('invalid request.');
+			}
+
+			await TagModel.update(tagId, name);
+			res.status(200).json({ message: 'success.' });
+		} catch (e) {
+			next(e);
+		}
+	}
+
+	static async delete(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { tagId } = req.params;
+			if (!tagId) {
+				throw new Error('invalid request.');
+			}
+
+			await TagModel.delete(tagId);
+			res.status(200).json({ message: 'success.' });
+		} catch (e) {
+			next(e);
 		}
 	}
 }

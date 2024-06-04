@@ -1,20 +1,18 @@
-import { Prisma } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
-import { DisplayNote, Result } from '../types';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { DisplayNote } from '../types';
 import NoteListItem from '../types/NoteListItem.type';
 
 const prisma = new PrismaClient();
 
-// ノートの全般の処理を行うクラス
-class NoteService {
-	static async post(
+class NoteModel {
+	// TODO: noteIdが返ってくるのは不自然か。
+	static async create(
 		note: Prisma.NoteCreateInput,
 		userId: string,
 		tagId: string[],
-	): Promise<Result<string>> {
-		// トランザクション処理
+	): Promise<string> {
 		return await prisma
-			.$transaction(async (transaction): Promise<Result<string>> => {
+			.$transaction(async (transaction): Promise<string> => {
 				// ノートを作成
 				const createdNote = await transaction.note.create({
 					data: {
@@ -23,7 +21,6 @@ class NoteService {
 					},
 				});
 
-				// 作成したノートのIDを取得
 				const noteId = createdNote.id;
 
 				// ノートとタグを紐づける
@@ -38,21 +35,14 @@ class NoteService {
 					}),
 				);
 
-				return { status: true, data: noteId };
-			})
-			.catch((error) => {
-				// TODO: 📝トランザクション中に発生したエラーのエラーハンドリングを書く。
-				// ex: connect先のIDが存在しない場合など。
-				// https://chat.openai.com/share/8e06ceb5-2675-4827-b1d0-44bb8919e3f2
-				console.log(error);
-				return { status: false, error: 'server error.' };
+				return noteId;
 			})
 			.finally(() => {
 				prisma.$disconnect();
 			});
 	}
 
-	static async getById(noteId: string, userId: string): Promise<Result<DisplayNote>> {
+	static async getById(noteId: string, userId: string): Promise<DisplayNote> {
 		try {
 			const note = await prisma.note.findUnique({
 				where: {
@@ -84,19 +74,16 @@ class NoteService {
 			});
 
 			if (!note) {
-				return { status: false, error: 'note not found.' };
+				throw new Error('note not found.');
 			}
 
-			return { status: true, data: note };
-		} catch (error) {
-			console.log(error);
-			return { status: false, error: 'server error.' };
+			return note;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 
-	static async getAll(userId: string): Promise<Result<NoteListItem[]>> {
+	static async getAll(userId: string): Promise<NoteListItem[]> {
 		try {
 			const note = await prisma.note.findMany({
 				where: {
@@ -126,27 +113,19 @@ class NoteService {
 				},
 			});
 
-			if (!note) {
-				return { status: false, error: 'note not found.' };
-			}
-
-			return { status: true, data: note };
-		} catch (error) {
-			console.log(error);
-			return { status: false, error: 'server error.' };
+			return note;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 
-	// TODO: 🔍トランザクション処理が回りくどい気がする。本当にこの書き方で良いのか要検討。
 	static async update(
 		noteId: string,
 		updateData: { title: string; content: string },
 		tagId: string[],
-	): Promise<Result<void>> {
+	): Promise<void> {
 		return await prisma
-			.$transaction(async (transaction): Promise<Result<void>> => {
+			.$transaction(async (transaction): Promise<void> => {
 				await transaction.note.update({
 					where: {
 						id: noteId,
@@ -163,8 +142,7 @@ class NoteService {
 				});
 
 				await Promise.all(
-					tagId.map((tagId: string, index) => {
-						console.log(index);
+					tagId.map((tagId: string) => {
 						return transaction.noteTag.create({
 							data: {
 								note: { connect: { id: noteId } },
@@ -174,18 +152,14 @@ class NoteService {
 					}),
 				);
 
-				return { status: true };
-			})
-			.catch((error) => {
-				console.log(error);
-				return { status: false, error: 'server error.' };
+				return;
 			})
 			.finally(() => {
 				prisma.$disconnect();
 			});
 	}
 
-	static async delete(noteId: string): Promise<Result<void>> {
+	static async delete(noteId: string): Promise<void> {
 		try {
 			await prisma.note.delete({
 				where: {
@@ -193,14 +167,11 @@ class NoteService {
 				},
 			});
 
-			return { status: true };
-		} catch (error) {
-			console.log(error);
-			return { status: false, error: 'server error.' };
+			return;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 }
 
-export default NoteService;
+export default NoteModel;

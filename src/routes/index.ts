@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuthenticated } from '../middleware';
+import { isAuthenticated } from '@/middleware';
 import AuthRouter from './AuthRouter';
 import NoteRouter from './NoteRouter';
 import TagRouter from './TagRouter';

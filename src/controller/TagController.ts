@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { TagModel } from '../models';
+import { TagModel } from '@/models';
 
 class TagController {
 	static async create(req: Request, res: Response, next: NextFunction) {

@@ -3,17 +3,16 @@ import { PrismaClient, User } from '@prisma/client';
 const prisma = new PrismaClient();
 
 class UserModel {
-	// サインアップができたらユーザーIDを返す。
 	static async create(username: string, email: string, password: string): Promise<User> {
 		try {
-			const user = await prisma.user.create({
+			const createdUser = await prisma.user.create({
 				data: {
 					name: username,
 					email: email,
 					hashedPassword: password,
 				},
 			});
-			return user;
+			return createdUser;
 		} finally {
 			await prisma.$disconnect();
 		}
@@ -47,24 +46,26 @@ class UserModel {
 
 	static async update(userId: string, username: string, email: string): Promise<User> {
 		try {
-			const user = await prisma.user.update({
+			const updatedUser = await prisma.user.update({
 				where: { id: userId },
 				data: {
 					name: username,
 					email: email,
 				},
 			});
-			return user;
+			return updatedUser;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 
-	static async delete(userId: string): Promise<void> {
+	static async delete(userId: string): Promise<User> {
 		try {
-			await prisma.user.delete({
+			const deletedUser = await prisma.user.delete({
 				where: { id: userId },
 			});
+
+			return deletedUser;
 		} finally {
 			await prisma.$disconnect();
 		}

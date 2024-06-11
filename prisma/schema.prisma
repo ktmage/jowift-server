@@ -11,7 +11,13 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  relationMode = "prisma"
+//   relationMode = "prisma"
+}
+
+// 認証方法
+enum AuthMethod {
+  LOCAL
+  GOOGLE
 }
 
 model User {
@@ -27,19 +33,13 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-// 認証方法
-enum AuthMethod {
-  LOCAL
-  GOOGLE
-}
-
 model Note {
   id       String  @id @default(uuid())
   title    String
   content  String  @db.Text
-  author   User?   @relation(fields: [authorId], references: [id])
-  authorId String?
-  tags     NoteTag[] 
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+  tags     Tag[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -47,26 +47,91 @@ model Note {
 model Tag {
   id       String  @id @default(uuid())
   name     String
-  author   User?   @relation(fields: [authorId], references: [id])
-  authorId String?
-  notes    NoteTag[]
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+  notes    Note[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model NoteTag {
-  noteId String
-  tagId  String
-  note   Note @relation(fields: [noteId], references: [id], onDelete: Cascade) // onDelete: Cascade でnoteが削除されたらNoteTagも削除されるようにする。
-  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade) // onDelete: Cascade でtagが削除されたらNoteTagも削除されるようにする。
-
-  @@id([noteId, tagId])
 }
 
 model Session {
   id        String   @id
   sid       String   @unique
-//   data      String   @db.MediumText
   data      String   @db.Text
   expiresAt   DateTime
 }
+
+// 明示的な多対多のリレーションを作る場合
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+//   relationMode = "prisma"
+// }
+
+// model User {
+//   id        String  @unique @default(uuid()) // idは内部でしか使わないのでautoincrementにしておく。
+//   name      String  @unique // nameはparamで使うのでuniqueにしておく。
+//   email     String  @unique // 同じemailで登録できないようにする。
+//   hashedPassword String?
+//   photoUrl  String?
+//   authMethod AuthMethod @default(LOCAL)
+//   notes     Note[]
+//   tags      Tag[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// // 認証方法
+// enum AuthMethod {
+//   LOCAL
+//   GOOGLE
+// }
+
+// model Note {
+//   id       String  @id @default(uuid())
+//   title    String
+//   content  String  @db.Text
+//   author   User?   @relation(fields: [authorId], references: [id])
+//   authorId String?
+//   tags     NoteTag[] 
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Tag {
+//   id       String  @id @default(uuid())
+//   name     String
+//   author   User?   @relation(fields: [authorId], references: [id])
+//   authorId String?
+//   notes    NoteTag[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model NoteTag {
+//   noteId String
+//   tagId  String
+//   note   Note @relation(fields: [noteId], references: [id], onDelete: Cascade) // onDelete: Cascade でnoteが削除されたらNoteTagも削除されるようにする。
+//   tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade) // onDelete: Cascade でtagが削除されたらNoteTagも削除されるようにする。
+
+//   @@id([noteId, tagId])
+// }
+
+// model Session {
+//   id        String   @id
+//   sid       String   @unique
+// //   data      String   @db.MediumText
+//   data      String   @db.Text
+//   expiresAt   DateTime
+// }

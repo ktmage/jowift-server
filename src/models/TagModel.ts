@@ -1,10 +1,9 @@
-import { PrismaClient } from '@prisma/client';
-import { DisplayTag } from '../types';
+import { PrismaClient, Tag } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 class TagModel {
-	static async create(name: string, userId: string): Promise<string> {
+	static async create(name: string, userId: string): Promise<Tag> {
 		try {
 			const createdTag = await prisma.tag.create({
 				data: {
@@ -15,23 +14,17 @@ class TagModel {
 				},
 			});
 
-			return createdTag.id;
+			return createdTag;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 
-	static async getAll(userId: string): Promise<DisplayTag[]> {
+	static async getAll(userId: string): Promise<Tag[]> {
 		try {
 			const tags = await prisma.tag.findMany({
 				where: {
 					authorId: userId,
-				},
-				select: {
-					id: true,
-					name: true,
-					createdAt: true,
-					updatedAt: true,
 				},
 			});
 
@@ -41,17 +34,11 @@ class TagModel {
 		}
 	}
 
-	static async getById(tagId: string): Promise<DisplayTag> {
+	static async getById(tagId: string): Promise<Tag> {
 		try {
 			const tag = await prisma.tag.findUnique({
 				where: {
 					id: tagId,
-				},
-				select: {
-					id: true,
-					name: true,
-					createdAt: true,
-					updatedAt: true,
 				},
 			});
 
@@ -65,28 +52,28 @@ class TagModel {
 		}
 	}
 
-	static async update(tagId: string, name: string): Promise<void> {
+	static async update(tagId: string, name: string): Promise<Tag> {
 		try {
-			await prisma.tag.update({
+			const updatedTag = await prisma.tag.update({
 				where: { id: tagId },
 				data: { name: name },
 			});
 
-			return;
+			return updatedTag;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 
-	static async delete(tagId: string): Promise<void> {
+	static async delete(tagId: string): Promise<Tag> {
 		try {
-			await prisma.tag.delete({
+			const deletedTag = await prisma.tag.delete({
 				where: {
 					id: tagId,
 				},
 			});
 
-			return;
+			return deletedTag;
 		} finally {
 			await prisma.$disconnect();
 		}

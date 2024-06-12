@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "set NODE_ENV=development&& npx tsnd --files src/server.ts",
+    "dev": "set NODE_ENV=development&& npx tsnd --files --require tsconfig-paths/register src/server.ts",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "eslint": "eslint --ignore-path .gitignore ./src/**/*.{js,ts}",
     "build": "npm install && tsc -p .",
@@ -23,7 +23,8 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { AuthService } from '../service';
-import RequestError from '../utility/RequestError';
-import { UserModel } from '../models';
+import { AuthService } from '@/service';
+import { RequestError } from '@/utility';
+import { UserModel } from '@/models';
 
 class AuthController {
 	static async signUp(req: Request, res: Response, next: NextFunction) {
@@ -10,9 +10,16 @@ class AuthController {
 			if (!name || !email || !password) {
 				throw new RequestError('invalid request.');
 			}
-			const user = await AuthService.signUp(name, email, password);
-			req.session.userId = user.id;
-			res.status(200).send({ message: 'success.' });
+			const createdUser = await AuthService.signUp(name, email, password);
+			req.session.userId = createdUser.id;
+			res.status(200).send({
+				name: createdUser.name,
+				email: createdUser.email,
+				photoUrl: createdUser.photoUrl,
+				authMethod: createdUser.authMethod,
+				createdAt: createdUser.createdAt,
+				updatedAt: createdUser.updatedAt,
+			});
 		} catch (e) {
 			next(e);
 		}
@@ -24,9 +31,16 @@ class AuthController {
 			if (!email || !password) {
 				throw new RequestError('invalid request.');
 			}
-			const result = await AuthService.login(email, password);
-			req.session.userId = result.id;
-			res.status(200).send({ message: 'success.' });
+			const user = await AuthService.login(email, password);
+			req.session.userId = user.id;
+			res.status(200).send({
+				name: user.name,
+				email: user.email,
+				photoUrl: user.photoUrl,
+				authMethod: user.authMethod,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt,
+			});
 		} catch (e) {
 			next(e);
 		}
@@ -60,7 +74,18 @@ class AuthController {
 
 			const user = await UserModel.getById(userId);
 
-			return res.status(200).json({ data: user });
+			if (!user) {
+				throw new RequestError('user not found.');
+			}
+
+			return res.status(200).json({
+				name: user.name,
+				email: user.email,
+				photoUrl: user.photoUrl,
+				authMethod: user.authMethod,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt,
+			});
 		} catch (e) {
 			next(e);
 		}
@@ -74,7 +99,11 @@ class AuthController {
 				throw new RequestError('no active session.');
 			}
 
-			await UserModel.delete(userId);
+			const user = await UserModel.delete(userId);
+
+			return res.status(200).json({
+				id: user.id,
+			});
 		} catch (e) {
 			next(e);
 		}

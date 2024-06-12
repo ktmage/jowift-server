@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { RequestError, ServiceError } from '../utility';
+import { RequestError, ServiceError } from '@/utility';
 import { Request, Response, NextFunction } from 'express';
 
 export const handleError = (err: Error, req: Request, res: Response, next: NextFunction) => {

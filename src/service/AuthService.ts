@@ -1,13 +1,13 @@
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { UserModel } from '../models';
-import { RequestError } from '../utility';
+import { UserModel } from '@/models';
+import { RequestError } from '@/utility';
 
 class AuthService {
 	static async signUp(username: string, email: string, password: string): Promise<User> {
 		const hashedPassword = await bcrypt.hash(password, 10);
-		const user = UserModel.create(username, email, hashedPassword);
-		return user;
+		const createdUser = UserModel.create(username, email, hashedPassword);
+		return createdUser;
 	}
 
 	static async login(email: string, password: string): Promise<User> {

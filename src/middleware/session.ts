@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { COOKIE, SESSION } from '../config';
+import { COOKIE, SESSION } from '@/config';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import express from 'express';
 import session from 'express-session';

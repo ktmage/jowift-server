@@ -1,75 +1,62 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-import { DisplayNote } from '../types';
-import NoteListItem from '../types/NoteListItem.type';
+import { Note, PrismaClient, Tag } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+type FullNote = Note & { tags: Tag[] };
+
 class NoteModel {
-	// TODO: noteIdが返ってくるのは不自然か。
 	static async create(
-		note: Prisma.NoteCreateInput,
+		title: string,
+		content: string,
 		userId: string,
 		tagId: string[],
-	): Promise<string> {
-		return await prisma
-			.$transaction(async (transaction): Promise<string> => {
-				// ノートを作成
-				const createdNote = await transaction.note.create({
-					data: {
-						...note,
-						author: { connect: { id: userId } },
+	): Promise<FullNote> {
+		try {
+			const createdNote = await prisma.note.create({
+				data: {
+					title,
+					content,
+					author: { connect: { id: userId } },
+					tags: {
+						connect: tagId.map((id) => ({ id })),
 					},
-				});
-
-				const noteId = createdNote.id;
-
-				// ノートとタグを紐づける
-				await Promise.all(
-					tagId.map(async (tagId: string) => {
-						await transaction.noteTag.create({
-							data: {
-								note: { connect: { id: noteId } },
-								tag: { connect: { id: tagId } },
-							},
-						});
-					}),
-				);
-
-				return noteId;
-			})
-			.finally(() => {
-				prisma.$disconnect();
+				},
+				include: {
+					tags: true,
+				},
 			});
+			return createdNote;
+		} finally {
+			await prisma.$disconnect();
+		}
 	}
 
-	static async getById(noteId: string, userId: string): Promise<DisplayNote> {
+	static async getAll(userId: string): Promise<FullNote[]> {
+		try {
+			const notes = await prisma.note.findMany({
+				where: {
+					authorId: userId,
+				},
+				include: {
+					tags: true,
+				},
+			});
+
+			return notes;
+		} finally {
+			await prisma.$disconnect();
+		}
+	}
+
+	static async getById(noteId: string, userId: string): Promise<FullNote> {
 		try {
 			const note = await prisma.note.findUnique({
 				where: {
 					id: noteId,
 					authorId: userId,
 				},
-				select: {
-					id: true,
-					title: true,
-					content: true,
-					createdAt: true,
-					updatedAt: true,
-					author: {
-						select: {
-							name: true,
-						},
-					},
-					tags: {
-						select: {
-							tag: {
-								select: {
-									id: true,
-									name: true,
-								},
-							},
-						},
-					},
+				include: {
+					tags: true,
 				},
 			});
 
@@ -83,91 +70,44 @@ class NoteModel {
 		}
 	}
 
-	static async getAll(userId: string): Promise<NoteListItem[]> {
+	static async update(
+		noteId: string,
+		title: string,
+		content: string,
+		tagId: string[],
+	): Promise<FullNote> {
 		try {
-			const note = await prisma.note.findMany({
+			const updatedNote = await prisma.note.update({
 				where: {
-					authorId: userId,
+					id: noteId,
 				},
-				select: {
-					id: true,
-					title: true,
-					content: false,
-					createdAt: true,
-					updatedAt: true,
-					author: {
-						select: {
-							name: true,
-						},
-					},
+				data: {
+					title,
+					content,
 					tags: {
-						select: {
-							tag: {
-								select: {
-									id: true,
-									name: true,
-								},
-							},
-						},
+						set: tagId.map((id) => ({ id })),
 					},
+				},
+				include: {
+					tags: true,
 				},
 			});
 
-			return note;
+			return updatedNote;
 		} finally {
 			await prisma.$disconnect();
 		}
 	}
 
-	static async update(
-		noteId: string,
-		updateData: { title: string; content: string },
-		tagId: string[],
-	): Promise<void> {
-		return await prisma
-			.$transaction(async (transaction): Promise<void> => {
-				await transaction.note.update({
-					where: {
-						id: noteId,
-					},
-					data: {
-						...updateData,
-					},
-				});
-
-				await transaction.noteTag.deleteMany({
-					where: {
-						noteId: noteId,
-					},
-				});
-
-				await Promise.all(
-					tagId.map((tagId: string) => {
-						return transaction.noteTag.create({
-							data: {
-								note: { connect: { id: noteId } },
-								tag: { connect: { id: tagId } },
-							},
-						});
-					}),
-				);
-
-				return;
-			})
-			.finally(() => {
-				prisma.$disconnect();
-			});
-	}
-
-	static async delete(noteId: string): Promise<void> {
+	static async delete(noteId: string): Promise<Note> {
 		try {
-			await prisma.note.delete({
+			const deletedNote = await prisma.note.delete({
 				where: {
 					id: noteId,
 				},
 			});
 
-			return;
+			return deletedNote;
 		} finally {
 			await prisma.$disconnect();
 		}

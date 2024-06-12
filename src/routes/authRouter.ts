@@ -1,7 +1,7 @@
 import express from 'express';
-import { AuthController } from '@/controller';
+import { AuthController } from '../controller';
 import passport from 'passport';
-import { CORS } from '@/config';
+import { CORS } from '../config';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { GOOGLE_OAUTH } from '@/config';
+import { GOOGLE_OAUTH } from '../config';
 import passport from 'passport';
 import passportGoogle from 'passport-google-oauth20';
 const GoogleStrategy = passportGoogle.Strategy;

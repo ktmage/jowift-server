@@ -1,9 +1,9 @@
 /* eslint-disable no-irregular-whitespace */
 import path from 'path';
 import express from 'express';
-import Router from '@/routes';
-import { PORT } from '@/config';
-import { cors, session, auth, handleError } from '@/middleware';
+import Router from './routes';
+import { PORT } from './config';
+import { cors, session, auth, handleError } from './middleware';
 
 const app = express();
 

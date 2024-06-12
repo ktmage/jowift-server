@@ -1,5 +1,5 @@
 import cors from 'cors';
-import { CORS } from '@/config';
+import { CORS } from '../config';
 import express from 'express';
 
 // CORSの設定

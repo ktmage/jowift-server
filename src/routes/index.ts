@@ -1,8 +1,8 @@
 import express from 'express';
-import { isAuthenticated } from '../middleware';
-import authRouter from './authRouter';
-import noteRouter from './noteRouter';
-import tagRouter from './tagRouter';
+import { isAuthenticated } from '../middlewares';
+import authRouter from './auth-router';
+import noteRouter from './note-router';
+import tagRouter from './tag-router';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { AuthService } from '../service';
-import { RequestError } from '../utility';
+import { AuthService } from '../services';
+import { RequestError } from '../utilities';
 import { UserModel } from '../models';
 
 class AuthController {

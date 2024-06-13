@@ -1,3 +1,3 @@
-export { default as UserModel } from './UserModel';
-export { default as NoteModel } from './NoteModel';
-export { default as TagModel } from './TagModel';
+export { default as UserModel } from './user-model';
+export { default as NoteModel } from './note-model';
+export { default as TagModel } from './tag-model';

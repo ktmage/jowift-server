@@ -1,5 +1,5 @@
 import express from 'express';
-import { AuthController } from '../controller';
+import { AuthController } from '../controllers';
 import passport from 'passport';
 import { CORS } from '../config';
 

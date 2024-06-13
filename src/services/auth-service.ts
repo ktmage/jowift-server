@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { UserModel } from '../models';
-import { RequestError } from '../utility';
+import { RequestError } from '../utilities';
 
 class AuthService {
 	static async signUp(username: string, email: string, password: string): Promise<User> {

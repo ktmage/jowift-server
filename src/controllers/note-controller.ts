@@ -67,11 +67,6 @@ class NoteController {
 		try {
 			const { noteId } = req.params;
 
-			// TODO: デバッグ用
-			// if (noteId === "35f6f003-efd2-4cea-838a-a4fd8df2c353") {
-			//     throw new ServiceError('特別なエラーが発生しました。');
-			// }
-
 			if (!noteId) {
 				throw new Error('invalid request.');
 			}

@@ -13,7 +13,7 @@ router.get('/logout', AuthController.logout);
 router.get('/user', AuthController.getUser);
 router.delete('/user', AuthController.deleteUser);
 
-// Google OAuth
+// Google
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get(
 	'/google/callback',

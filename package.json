@@ -10,7 +10,8 @@
     "build": "npm install && tsc -p .",
     "start": "set NODE_ENV=production&&node dist/server.js",
     "migrate:postgres": "dotenv -e .env.development.local -- npx prisma migrate dev --name postgres-init",
-    "studio:postgres": "dotenv -e .env.development.local -- npx prisma studio"
+    "studio:postgres": "dotenv -e .env.development.local -- npx prisma studio",
+    "push:postgres": "dotenv -e .env.production.local -- npx prisma db push"
   },
   "author": "",
   "license": "ISC",

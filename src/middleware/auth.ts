@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { GOOGLE_OAUTH } from '../config';
 import passport from 'passport';
 import passportGoogle from 'passport-google-oauth20';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const GoogleStrategy = passportGoogle.Strategy;
 
 const router = express.Router();

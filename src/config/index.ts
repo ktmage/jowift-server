@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { getEnvVariable } from '../utility';
 
 export const CORS = {

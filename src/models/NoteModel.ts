@@ -2,7 +2,7 @@ import { Note, PrismaClient, Tag } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-type FullNote = Note & { tags: Tag[] };
+type FullNoteType = Note & { tags: Tag[] };
 
 class NoteModel {
 	static async create(
@@ -10,7 +10,7 @@ class NoteModel {
 		content: string,
 		userId: string,
 		tagId: string[],
-	): Promise<FullNote> {
+	): Promise<FullNoteType> {
 		try {
 			const createdNote = await prisma.note.create({
 				data: {
@@ -31,7 +31,7 @@ class NoteModel {
 		}
 	}
 
-	static async getAll(userId: string): Promise<FullNote[]> {
+	static async getAll(userId: string): Promise<FullNoteType[]> {
 		try {
 			const notes = await prisma.note.findMany({
 				where: {
@@ -48,7 +48,7 @@ class NoteModel {
 		}
 	}
 
-	static async getById(noteId: string, userId: string): Promise<FullNote> {
+	static async getById(noteId: string, userId: string): Promise<FullNoteType> {
 		try {
 			const note = await prisma.note.findUnique({
 				where: {
@@ -75,7 +75,7 @@ class NoteModel {
 		title: string,
 		content: string,
 		tagId: string[],
-	): Promise<FullNote> {
+	): Promise<FullNoteType> {
 		try {
 			const updatedNote = await prisma.note.update({
 				where: {
